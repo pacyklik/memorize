@@ -21,4 +21,8 @@ public class Lesson {
 	private Long id;
 	private String name;
 
+	public String toString() {
+		return name;
+	}
+
 }

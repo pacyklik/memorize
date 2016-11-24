@@ -1,0 +1,37 @@
+I will guard this things.	Będę pilnować tych rzeczy.
+A guard will escort you to the gate.	Strażnik odprowadzi cię do bramy.
+guard	strażnik
+You need good soil.	Potrzebujesz dobrą glebę.
+soil	gleba
+It is quite possible.	To jest całkiem możliwe.
+I don't quite understand what you mean.	Nie całkiem rozumiem, co masz na myśli.
+quite	całkiem
+oven	piekarnik
+I am within the crowd.	Jestem w tłumie.
+Come back within ten minutes.	Wróć w ciągu dziesięciu minut.
+within	w ciągu, wewnątrz
+not so far	nie tak daleko
+far far away	daleko daleko stąd
+far	daleko
+She is not actually coming.	Właściwie to ona nie przychodzi.
+Your answer was actually right.	Twoja odpowiedź była tak właściwie poprawna.
+actually	tak właściwie
+That's the first thing you should do.	To pierwsza rzecz jaką należy zrobić.
+thing	rzecz
+I'm sorry, you're last.	Przykro mi, jesteś ostatni.
+It can last forever.	To może trwać wiecznie.
+last	trwać, ostatni
+The fly is trapped in the spider's web.	Mucha jest uwięziona w sieci pająka.
+web	sieć
+The room is in good order.	Pokój jest w dobrym porządku.
+The order was executed yesterday.	Zamówienie zostało wykonane wczoraj.
+order	zamówienie, porządek
+The weather here is generally mild.	Pogoda tutaj jest na ogół łagodna.
+She is a generally optimistic person.	Ona jest ogólnie optymistyczną osobą.
+generally	ogólnie
+We have to make a major decision.	Musimy podjąć poważną decyzję.
+The virus don't attack any major organs.	Wirus nie atakuje żadnych głównych organów.
+major	główny, poważny
+He made several risky investments.	Zrobił kilka ryzykownych inwestycji.
+You should increase your investments.	Należy zwiększyć swoje inwestycje.
+investment	inwestycja

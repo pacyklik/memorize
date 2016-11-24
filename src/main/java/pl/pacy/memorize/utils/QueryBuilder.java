@@ -1,8 +1,6 @@
 package pl.pacy.memorize.utils;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 
@@ -16,7 +14,37 @@ public class QueryBuilder<T> {
 		private BooleanExpression like;
 
 		public PredicateBuilder like(StringPath path, String value) {
-			like = (like == null) ? path.like("%" + value + "%") : like.and(path.like("%" + value + "%"));
+			if (value != null && !value.isEmpty()) {
+				like = (like == null) ? path.like("%" + value + "%") : like.and(path.like("%" + value + "%"));
+			}
+			return this;
+		}
+
+		public PredicateBuilder eq(StringPath path, String value) {
+			if (value != null && !value.isEmpty()) {
+				like = (like == null) ? path.eq(value) : like.and(path.eq(value));
+			}
+			return this;
+		}
+
+		public PredicateBuilder eq(BooleanPath path, Boolean value) {
+			if (value != null) {
+				like = (like == null) ? path.eq(value) : like.and(path.eq(value));
+			}
+			return this;
+		}
+
+		public PredicateBuilder gt(NumberPath<Long> path, Long value) {
+			if (value != null) {
+				like = (like == null) ? path.gt(value) : like.and(path.gt(value));
+			}
+			return this;
+		}
+
+		public PredicateBuilder lt(NumberPath<Long> path, Long value) {
+			if (value != null) {
+				like = (like == null) ? path.lt(value) : like.and(path.lt(value));
+			}
 			return this;
 		}
 
@@ -26,9 +54,10 @@ public class QueryBuilder<T> {
 	}
 
 	private JPQLQuery<T> query;
-	private BooleanExpression like;
+	private PredicateBuilder predicateBuilder;
 
 	private QueryBuilder(EntityManager entityManager, EntityPathBase base) {
+		predicateBuilder = predicateBuilder();
 		query = new JPAQuery(entityManager);
 		query.from(base);
 	}
@@ -42,14 +71,34 @@ public class QueryBuilder<T> {
 	}
 
 	public QueryBuilder<T> like(StringPath path, String value) {
-		like = (like == null) ? path.like("%" + value + "%") : like.and(path.like("%" + value + "%"));
+		predicateBuilder.like(path, value);
 		return this;
 	}
 
-	public QueryBuilder<T> joinOn(EntityPathBase entityPathBase, BooleanExpression booleanExpression) {
+	public QueryBuilder<T> eq(StringPath path, String value) {
+		predicateBuilder.eq(path, value);
+		return this;
+	}
+
+	public QueryBuilder<T> eq(BooleanPath path, Boolean value) {
+		predicateBuilder.eq(path, value);
+		return this;
+	}
+
+	public QueryBuilder<T> gt(NumberPath<Long> path, Long value) {
+		predicateBuilder.gt(path, value);
+		return this;
+	}
+
+	public QueryBuilder<T> lt(NumberPath<Long> path, Long value) {
+		predicateBuilder.lt(path, value);
+		return this;
+	}
+
+	public QueryBuilder<T> joinOn(EntityPathBase joiningField, EntityPathBase entityType, BooleanExpression booleanExpression) {
 		// better way than simple if? RLY?
 		Optional.ofNullable(booleanExpression).ifPresent(e -> {
-			query.innerJoin(entityPathBase);
+			query.innerJoin(joiningField, entityType);
 			query.on(e);
 		});
 
@@ -61,6 +110,7 @@ public class QueryBuilder<T> {
 	}
 
 	public JPQLQuery<T> build() {
+		BooleanExpression like = predicateBuilder.build();
 		return (like == null) ? query : query.where(like);
 	}
 

@@ -19,7 +19,9 @@ public class Word {
 	private Long id;
 	private String word;
 	private String translate;
+	@Column(length = 400)
 	private String sentence;
+	@Column(length = 400)
 	private String sentenceTranslate;
 	private Boolean know;
 	private Boolean prepared;

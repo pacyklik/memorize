@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping>
+        <class-a>java.util.LinkedHashMap</class-a>
+        <class-b>pl.pacy.memorize.dto.FilterWordDTO</class-b>
+        <field custom-converter="pl.pacy.memorize.utils.ThanLevelLearnedConverter">
+            <a>thanLevelLearned</a>
+            <b>thanLevelLearned</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>pl.pacy.memorize.entity.Word</class-a>
+        <class-b>pl.pacy.memorize.dto.WordDTO</class-b>
+        <field custom-converter="pl.pacy.memorize.utils.SentenceConverter">
+            <a>sentence</a>
+            <b>sentence</b>
+        </field>
+        <field custom-converter=
+                       "pl.pacy.memorize.utils.SentenceConverter">
+            <a>sentenceTranslate</a>
+            <b>sentenceTranslate</b>
+        </field>
+    </mapping>
+
+</mappings>
