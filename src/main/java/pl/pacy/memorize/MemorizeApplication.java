@@ -1,7 +1,5 @@
 package pl.pacy.memorize;
 
-//import com.mysema.query.types.expr.BooleanExpression;
-
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -109,6 +107,5 @@ public class MemorizeApplication {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(MemorizeApplication.class, args);
-		//		createLessonS("0100");
 	}
 }

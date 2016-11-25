@@ -1,11 +1,16 @@
 package pl.pacy.memorize.utils;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.Querydsl;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 public class QueryBuilder<T> {
 
@@ -55,19 +60,27 @@ public class QueryBuilder<T> {
 
 	private JPQLQuery<T> query;
 	private PredicateBuilder predicateBuilder;
+	private Querydsl querydsl;
+	private Class<T> entityClass;
 
-	private QueryBuilder(EntityManager entityManager, EntityPathBase base) {
+	private QueryBuilder(EntityManager entityManager, EntityPathBase base, Class<T> entityClass) {
+		this.entityClass = entityClass;
 		predicateBuilder = predicateBuilder();
-		query = new JPAQuery(entityManager);
-		query.from(base);
+		query = new JPAQuery(entityManager).from(base);
+		querydsl = new Querydsl(entityManager, new PathBuilder<T>(entityClass, base.getMetadata()));
 	}
 
-	public static QueryBuilder builder(EntityManager entityManager, EntityPathBase base) {
-		return new QueryBuilder(entityManager, base);
+	public static QueryBuilder builder(EntityManager entityManager, EntityPathBase base, Class entityClass) {
+		return new QueryBuilder(entityManager, base, entityClass);
 	}
 
 	public static PredicateBuilder predicateBuilder() {
 		return new PredicateBuilder();
+	}
+
+	public QueryBuilder<T> select(Expression... expression) {
+		query.select(Projections.bean(entityClass, expression));
+		return this;
 	}
 
 	public QueryBuilder<T> like(StringPath path, String value) {
@@ -97,15 +110,15 @@ public class QueryBuilder<T> {
 
 	public QueryBuilder<T> joinOn(EntityPathBase joiningField, EntityPathBase entityType, BooleanExpression booleanExpression) {
 		// better way than simple if? RLY?
-		Optional.ofNullable(booleanExpression).ifPresent(e -> {
+		ofNullable(booleanExpression).ifPresent(e -> {
 			query.innerJoin(joiningField, entityType);
 			query.on(e);
 		});
+		return this;
+	}
 
-		//		if (booleanExpression != null) {
-		//			query.innerJoin(entityPathBase);
-		//			query.on(booleanExpression);
-		//		}
+	public QueryBuilder<T> pagination(Pageable pageable) {
+		query = (pageable == null) ? query : querydsl.applyPagination(pageable, query);
 		return this;
 	}
 

@@ -1,6 +1,7 @@
 package pl.pacy.memorize.dto;
 
 import lombok.Data;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class FilterWordDTO {
 	private Long levelLearned;
 	private ThanLevelLearned thanLevelLearned;
 	private String lesson;
+
+	private Pageable pageable;
 
 	public Long getGtLevelLearned() {
 		return (levelLearned != null && thanLevelLearned == ThanLevelLearned.greater) ? levelLearned : null;

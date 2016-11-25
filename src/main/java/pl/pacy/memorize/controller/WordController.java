@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.pacy.memorize.dto.WordDTO;
+import pl.pacy.memorize.dto.WordListDTO;
 import pl.pacy.memorize.service.WordService;
 
-import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @RestController
 public class WordController {
@@ -17,10 +17,12 @@ public class WordController {
 	@Autowired
 	private WordService wordService;
 
+	private static final Logger log = java.util.logging.Logger.getLogger(WordController.class.getName());
+
 	@GetMapping("/api/words/find/{page}")
-	public List findWords(@PathVariable Long page, @RequestParam Map<String, String> params) {
-		System.out.println(page + " => " + params);
-		List<WordDTO> words = wordService.getWords(page, params);
-		return words;
+	public WordListDTO findWords(@PathVariable Integer page, @RequestParam Map<String, String> params) {
+		log.info(page + " => " + params);
+		WordListDTO wordsListDTO = wordService.getWords(page, params);
+		return wordsListDTO;
 	}
 }
