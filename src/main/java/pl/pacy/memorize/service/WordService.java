@@ -11,6 +11,8 @@ public interface WordService {
 
 	public WordDTO getWord(Long id);
 
+	public WordDTO update(WordDTO wordDTO);
+
 	public WordDTO getWordWithSentences(Long id);
 
 	public WordListDTO getWords(Integer page, Map criteria);
@@ -18,5 +20,7 @@ public interface WordService {
 	public List<WordDTO> getWordsWithSentences(Integer page, Map criteria);
 
 	public List<LessonDTO> getLessons();
+
+	public WordListDTO getWordsToCheck();
 
 }

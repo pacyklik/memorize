@@ -1,6 +1,7 @@
 package pl.pacy.memorize.service;
 
 import com.querydsl.jpa.JPQLQuery;
+import lombok.RequiredArgsConstructor;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,31 +21,59 @@ import pl.pacy.memorize.utils.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
+
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WordServiceImpl implements WordService {
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
 	@Autowired
-	private WordRepository wordRepository;
+	private final WordRepository wordRepository;
 
 	@Autowired
-	private LessonRepository lessonRepository;
+	private final LessonRepository lessonRepository;
 
 	@Autowired
-	private Mapper mapper;
+	private final Mapper mapper;
 
 	private static final Logger log = java.util.logging.Logger.getLogger(WordServiceImpl.class.getName());
 
 	@Override public WordDTO getWord(Long id) {
 		Word word = wordRepository.findOne(id);
 		WordDTO wordDTO = mapper.map(word, WordDTO.class);
+		return wordDTO;
+	}
+
+	@Transactional
+	@Override public WordDTO update(WordDTO wordDTO) {
+		Word word = wordRepository.findOne(wordDTO.getId());
+		log.info("word> " + entityManager.contains(word));
+		mapper.map(wordDTO, word);
+		log.info("word> " + entityManager.contains(word));
+
+		// java 8 way
+		boolean prepared = !ofNullable(word).map(Word::getSentence).orElse("").isEmpty()
+				&& !of(word).map(Word::getSentenceTranslate).orElse("").isEmpty();
+
+		// java 7 way
+		//		boolean prepared = false;
+		//		if (word != null && word.getSentence() != null && !word.getSentence().isEmpty()) {
+		//			if (word.getSentenceTranslate() != null && !word.getSentenceTranslate().isEmpty()) {
+		//				prepared = true;
+		//			}
+		//		}
+
+		word.setPrepared(prepared);
 		return wordDTO;
 	}
 
@@ -72,7 +101,6 @@ public class WordServiceImpl implements WordService {
 						QueryBuilder.predicateBuilder().like(qLesson.name, filterWordDTO.getLesson()).build())
 				.pagination(pageable)
 				.build();
-
 		// prepare return dto
 		WordListDTO wordListDTO = WordListDTO.builder()
 				.count(query.fetchCount())
@@ -90,7 +118,10 @@ public class WordServiceImpl implements WordService {
 
 	@Override public List<LessonDTO> getLessons() {
 		List<Lesson> lessons = lessonRepository.findAll();
-		List<LessonDTO> lessonDTOs = lessons.stream().map(l -> mapper.map(l, LessonDTO.class)).collect(Collectors.toList());
-		return lessonDTOs;
+		return lessons.stream().map(l -> mapper.map(l, LessonDTO.class)).collect(Collectors.toList());
+	}
+
+	@Override public WordListDTO getWordsToCheck() {
+		return null;
 	}
 }

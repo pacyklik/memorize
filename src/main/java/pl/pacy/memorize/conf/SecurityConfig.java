@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().ignoringAntMatchers("/api/logout");
 
 		// deactivation of csrf token
-		//				http.csrf().disable();
+		http.csrf().disable();
 	}
 
 	@Autowired

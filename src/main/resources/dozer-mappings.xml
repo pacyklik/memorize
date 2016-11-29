@@ -20,11 +20,13 @@
             <a>sentence</a>
             <b>sentence</b>
         </field>
-        <field custom-converter=
-                       "pl.pacy.memorize.utils.SentenceConverter">
+        <field custom-converter="pl.pacy.memorize.utils.SentenceConverter">
             <a>sentenceTranslate</a>
             <b>sentenceTranslate</b>
         </field>
+        <field custom-converter="pl.pacy.memorize.utils.LessonConverter">
+            <a>lesson</a>
+            <b>lesson</b>
+        </field>
     </mapping>
-
 </mappings>
